@@ -38,7 +38,7 @@ def inserting_initial_data(config_file):
         if (("S" in parameters) or ("R" in parameters) or ("C" in parameters)):
             first_letter = line[0]
             if first_letter == "S":
-                # inserting to student table
+                # inserting to students table
                 grade = parameters[1].strip()
                 count = parameters[2].strip()
                 data_cursor.execute("INSERT INTO students (grade, count) VALUES (?, ?)", [grade, count])
