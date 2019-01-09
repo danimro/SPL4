@@ -3,17 +3,28 @@ import os
 import sys
 import atexit
 
-# checks if the the classes data base is already exists.
+"""
+boolean to check whether the database exists or not.
+"""
 DBExist = os.path.isfile("schedule.db")
 
-# connects to classes.db, creates it if it doesn't exists.
+"""
+The sqlite database that is connected to "schedule.db" database.
+"""
 db = sqlite3.connect("schedule.db")
 
-# cursor to read data from the data base.
+"""
+database cursor to iterate over and execute general queries from the 'schedule.db' database.
+"""
 data_cursor = db.cursor()
 
 
 def close_data_base():
+    """
+    Committing the changes to the 'schedule.db' database,
+    closing the schedule.db cursor, and than closing the connection.
+    :return: None
+    """
     db.commit()
     data_cursor.close()
     db.close()
@@ -24,6 +35,12 @@ atexit.register(close_data_base)
 
 
 def create_db():
+    """
+    Creating three tables in the 'schedule.db' database:
+        Courses --> hold information about running and pending courses.
+        Students
+    :return:
+    """
     data_cursor.execute("CREATE TABLE IF NOT EXISTS courses (id INTEGER PRIMARY KEY, course_name TEXT NOT NULL, student TEXT NOT NULL, number_of_students INTEGER NOT NULL, class_id INTEGER REFERENCES classrooms(id), course_length INTEGER NOT NULL)")
     data_cursor.execute("CREATE TABLE IF NOT EXISTS students (grade TEXT PRIMARY KEY, count INTEGER NOT NULL)")
     data_cursor.execute("CREATE TABLE IF NOT EXISTS classrooms (id INTEGER PRIMARY KEY, location TEXT NOT NULL, current_course_id INTEGER NOT NULL, current_course_time_left INTEGER NOT NULL)")

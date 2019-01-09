@@ -80,7 +80,6 @@ DBExist = os.path.isfile("schedule.db")
 The sqlite database that is connected to "schedule.db" database.
 """
 db = sqlite3.connect("schedule.db")
-# cursors to collect data from the database
 """
 database cursor to iterate over general queries from the 'schedule.db' database.
 """
@@ -221,7 +220,7 @@ def close_data_base():
     """
     Committing the changes to the 'schedule.db' database,
     closing the schedule.db cursors, and than closing the connection.
-    :return:
+    :return: None
     """
     db.commit()
     data_cursor.close()
@@ -234,7 +233,7 @@ def close_data_base():
 def main():
     """
     main function of the 'schedule.py' module.
-    :return:
+    :return: None
     """
     global iteration_number
     if DBExist:
