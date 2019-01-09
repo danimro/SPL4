@@ -4,10 +4,10 @@ import sys
 import atexit
 
 # checks if the the classes data base is already exists.
-DBExist = os.path.isfile("classes.db")
+DBExist = os.path.isfile("schedule.db")
 
 # connects to classes.db, creates it if it doesn't exists.
-db = sqlite3.connect("classes.db")
+db = sqlite3.connect("schedule.db")
 
 # cursor to read data from the data base.
 data_cursor = db.cursor()
@@ -73,7 +73,6 @@ def print_tables():
     data_cursor.execute("SELECT * FROM classrooms")
     for row in data_cursor:
         print(row)
-
     #students:
     print("students")
     data_cursor.execute("SELECT * FROM students")
@@ -81,8 +80,12 @@ def print_tables():
         print(row)
 
 
-if __name__ == '__main__':
+def main():
     if not DBExist:
         create_db()
         inserting_initial_data(sys.argv[1])
         print_tables()
+
+
+if __name__ == '__main__':
+    main()
