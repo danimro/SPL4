@@ -3,6 +3,7 @@ import os
 import sys
 import atexit
 
+# region Global Variables
 """
 boolean to check whether the database exists or not.
 """
@@ -17,6 +18,7 @@ db = sqlite3.connect("schedule.db")
 database cursor to iterate over and execute general queries from the 'schedule.db' database.
 """
 data_cursor = db.cursor()
+# endregion Global Variables
 
 
 def close_data_base():
@@ -39,7 +41,7 @@ def create_db():
     Creating three tables in the 'schedule.db' database:
         Courses --> hold information about running and pending courses.
         Students
-    :return:
+    :return:None.
     """
     data_cursor.execute("CREATE TABLE IF NOT EXISTS courses (id INTEGER PRIMARY KEY, course_name TEXT NOT NULL, student TEXT NOT NULL, number_of_students INTEGER NOT NULL, class_id INTEGER REFERENCES classrooms(id), course_length INTEGER NOT NULL)")
     data_cursor.execute("CREATE TABLE IF NOT EXISTS students (grade TEXT PRIMARY KEY, count INTEGER NOT NULL)")
@@ -47,19 +49,23 @@ def create_db():
 
 
 def inserting_initial_data(config_file):
+    """
+    inserting initial data in the tables of 'schedule.db' database from the given config file.
+    :param config_file:             path to the config text file.
+    :return: None.
+    """
     with open(config_file, 'r') as config:
         lines = config.read()
     for line in lines.split('\n'):
         line = line.strip()
         parameters = line.split(",")
-        if (("S" in parameters) or ("R" in parameters) or ("C" in parameters)):
+        if ("S" in parameters) or ("R" in parameters) or ("C" in parameters):
             first_letter = line[0]
             if first_letter == "S":
                 # inserting to students table
                 grade = parameters[1].strip()
                 count = parameters[2].strip()
                 data_cursor.execute("INSERT INTO students (grade, count) VALUES (?, ?)", [grade, count])
-
             elif first_letter == "R":
                 # inserting to classrooms table
                 id = parameters[1].strip()
@@ -67,7 +73,6 @@ def inserting_initial_data(config_file):
                 current_course_id = 0
                 current_course_time_left = 0
                 data_cursor.execute("INSERT INTO classrooms (id, location, current_course_id, current_course_time_left) VALUES (?, ?, ?, ?)", [id, location, current_course_id, current_course_time_left])
-
             elif first_letter == "C":
                 # inserting to courses table
                 id = parameters[1].strip()
@@ -80,17 +85,21 @@ def inserting_initial_data(config_file):
 
 
 def print_tables():
+    """
+    Prints all the rows of the available tables  in the "schedule.db" database.
+    :return: None.
+    """
     # courses:
     print("courses")
     data_cursor.execute("SELECT * FROM courses")
     for row in data_cursor:
         print(row)
-    #classrooms:
+    # classrooms:
     print("classrooms")
     data_cursor.execute("SELECT * FROM classrooms")
     for row in data_cursor:
         print(row)
-    #students:
+    # students:
     print("students")
     data_cursor.execute("SELECT * FROM students")
     for row in data_cursor:
@@ -98,6 +107,10 @@ def print_tables():
 
 
 def main():
+    """
+    main function of the 'create_db.py' file.
+    :return: None.
+    """
     if not DBExist:
         create_db()
         inserting_initial_data(sys.argv[1])

@@ -108,7 +108,7 @@ iteration_number = 0
 
 def print_tables():
     """
-    Prints all the rows of the available  in the "schedule.db" database.
+    Prints all the rows of the available tables in the "schedule.db" database.
     :return: None
     """
     # courses:
@@ -163,7 +163,8 @@ def new_course_into_classroom(course, classroom):
     amount_of_students = course[COURSE_NUMBER_OF_STUDENTS_INDEX]
     updated_amount_of_students = student_cursor.execute(Q_CHECK_STUDENT_COUNT, [student_type]).fetchone()[0] - amount_of_students
     if updated_amount_of_students < 0:
-        # if the number of available student is smaller the the capacity of the course --> update to zero (enter all available students)
+        # if the number of available student is smaller the the capacity of the course -->
+        # update to zero (enter all available students)
         updated_amount_of_students = 0
     student_cursor.execute(Q_UPDATE_STUDENTS_COUNT, [updated_amount_of_students, student_type])
 
@@ -241,7 +242,6 @@ def main():
         number_of_courses = updating_number_of_courses()
         if number_of_courses == 0:
             # if there are no courses in the database --> print current status
-            # todo what if db doesn't exists?
             print_tables()
         else:
             while DBExist and number_of_courses > 0:
