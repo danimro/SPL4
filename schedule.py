@@ -217,6 +217,20 @@ def check_occupied_classroom(classroom):
         print("({}) {}: occupied by {}".format(iteration_number, classroom[CLASSROOM_LOCATION_INDEX], current_course[COURSE_NAME_INDEX]))
 
 
+def close_data_base():
+    """
+    Committing the changes to the 'schedule.db' database,
+    closing the schedule.db cursors, and than closing the connection.
+    :return:
+    """
+    db.commit()
+    data_cursor.close()
+    course_cursor.close()
+    student_cursor.close()
+    classroom_cursor.close()
+    db.close()
+
+
 def main():
     """
     main function of the 'schedule.py' module.
@@ -241,10 +255,12 @@ def main():
                     else:
                         # this class is occupied
                         check_occupied_classroom(current_classroom)
-
+                # printing the current status of the table,increase the iteration number,
+                # and checking the current number of courses
                 print_tables()
                 iteration_number += 1
                 number_of_courses = updating_number_of_courses()
+            close_data_base()
 
 
 if __name__ == '__main__':
